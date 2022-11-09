@@ -27,6 +27,10 @@ DEP_LD_FLAGS="-L${BUILD_DIR_EXTERNAL}/${ANDROID_ABI}/lib $FFMPEG_EXTRA_LD_FLAGS"
 
 ./configure \
   --prefix=${BUILD_DIR_FFMPEG}/${ANDROID_ABI} \
+  --disable-doc \
+  --enable-debug=3 \
+  --disable-optimizations \
+  --disable-stripping \
   --enable-cross-compile \
   --target-os=android \
   --arch=${TARGET_TRIPLE_MACHINE_ARCH} \
@@ -39,7 +43,7 @@ DEP_LD_FLAGS="-L${BUILD_DIR_EXTERNAL}/${ANDROID_ABI}/lib $FFMPEG_EXTRA_LD_FLAGS"
   --nm=${FAM_NM} \
   --ranlib=${FAM_RANLIB} \
   --strip=${FAM_STRIP} \
-  --extra-cflags="-O3 -fPIC $DEP_CFLAGS" \
+  --extra-cflags="-g -fno-limit-debug-info -Og -fPIC -fno-omit-frame-pointer -fno-inline $DEP_CFLAGS -fdebug-prefix-map=/home/hshakula/dev=C:/dev/projects" \
   --extra-ldflags="$DEP_LD_FLAGS" \
   --enable-shared \
   --disable-static \
@@ -48,6 +52,5 @@ DEP_LD_FLAGS="-L${BUILD_DIR_EXTERNAL}/${ANDROID_ABI}/lib $FFMPEG_EXTRA_LD_FLAGS"
   ${EXTRA_BUILD_CONFIGURATION_FLAGS} \
   $ADDITIONAL_COMPONENTS || exit 1
 
-${MAKE_EXECUTABLE} clean
 ${MAKE_EXECUTABLE} -j${HOST_NPROC}
 ${MAKE_EXECUTABLE} install
